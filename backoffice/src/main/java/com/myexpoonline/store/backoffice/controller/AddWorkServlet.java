@@ -2,8 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package com.myexpoonline.store.frontoffice.controller;
+package com.myexpoonline.store.backoffice.controller;
 
+import com.myexpoonline.store.core.entity.Author;
+import com.myexpoonline.store.core.entity.Catalogue;
+import com.myexpoonline.store.core.entity.Work;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -71,7 +74,40 @@ public class AddWorkServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String title = request.getParameter("title");
+        int year = Integer.parseInt(request.getParameter("year"));
+        String style = request.getParameter("style");
+        String authorName = request.getParameter("author");
+        String description = request.getParameter("description");
+        
+        Work myWork = new Work(title);
+        myWork.setStyle(style);
+        myWork.setDescription(description);
+        myWork.setYear(year);
+        
+        Author author = new Author();
+        author.setName(authorName);
+        
+        myWork.setAuthor(author);
+        myWork.setId(Work.lastId);
+        
+        Catalogue.listOfWorks.add(myWork);
+        
+        response.setContentType("text/html;charset=UTF-8");
+          PrintWriter out = response.getWriter();
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Oeuvre ajoutée</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<p> Votre oeuvre a correctement été ajoutée </p>");
+            out.println("<a href='home'> Retourner à l'accueil </a>");
+            out.println("</body>");
+            out.println("</html>");
+        
+        
     }
 
     /**
